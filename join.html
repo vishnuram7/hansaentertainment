@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join the Universe — Hansa Entertainment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#5B7EC5;--blue-dark:#3D5EA0;--blue-light:#EEF2FA;--blue-xlight:#F5F8FF;
+    --teal:#3DAABB;--green:#6BBF5E;--yellow:#F5C027;--orange:#E8834A;
+    --grey-text:#6B7280;--ink:#1A1D2E;--ink-soft:#3E4258;
+    --white:#FFFFFF;--off-white:#F7F9FC;--border:#E5EAF3;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:400;overflow-x:hidden;cursor:none}
+
+  /* CURSOR */
+  .cursor{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,background 0.2s}
+  .cursor-ring{width:30px;height:30px;border:1.5px solid rgba(91,126,197,0.45);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.22s ease}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:70px;box-shadow:0 2px 20px rgba(91,126,197,0.07)}
+  .nav-logo img{height:42px;display:block}
+  .nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+  .nav-links a{text-decoration:none;font-size:0.82rem;font-weight:500;color:var(--ink-soft);transition:color 0.2s;position:relative;padding-bottom:2px}
+  .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;border-radius:2px}
+  .nav-links a:hover{color:var(--blue)}
+  .nav-links a:hover::after{transform:scaleX(1)}
+  .nav-cta{background:var(--blue)!important;color:var(--white)!important;padding:8px 22px;border-radius:6px;font-weight:600!important;cursor:none}
+  .nav-cta::after{display:none!important}
+  .nav-cta:hover{background:var(--blue-dark)!important}
+  .nav-back{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--grey-text)!important}
+  .nav-back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+
+  /* PAGE HERO - DARK */
+  .page-hero{padding:130px 64px 80px;background:var(--ink);position:relative;overflow:hidden}
+  .page-hero-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--yellow);margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.1s forwards}
+  .breadcrumb a{color:var(--yellow);text-decoration:none;opacity:0.5}
+  .breadcrumb span{opacity:0.3}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(38px,5vw,66px);font-weight:700;line-height:1.07;color:var(--white);margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 0.25s forwards}
+  .page-title em{font-style:italic;color:var(--yellow);font-weight:400}
+  .page-sub{font-size:1rem;line-height:1.85;color:rgba(255,255,255,0.5);max-width:480px;font-weight:300;opacity:0;animation:fadeUp 0.7s 0.4s forwards}
+
+  /* ROLE SELECTOR IN HERO */
+  .role-cards-hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;opacity:0;animation:fadeIn 0.8s 0.55s forwards}
+  .rc{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;display:flex;align-items:center;gap:14px;cursor:none;transition:all 0.2s;position:relative}
+  .rc.selected,.rc:hover{border-color:var(--yellow);background:rgba(245,192,39,0.07)}
+  .rc-em{font-size:1.5rem;flex-shrink:0}
+  .rc-name{font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:2px}
+  .rc-sub{font-size:0.7rem;font-style:italic;font-family:'Playfair Display',serif;color:rgba(255,255,255,0.4)}
+  .rc-check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);position:absolute;top:14px;right:14px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;transition:all 0.2s}
+  .rc.selected .rc-check{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
+
+  /* DECO */
+  .hero-deco{position:absolute;border-radius:50%;pointer-events:none}
+  .hd1{width:460px;height:460px;background:radial-gradient(circle,rgba(91,126,197,0.12) 0%,transparent 70%);top:-100px;right:0}
+  .hd2{width:280px;height:280px;background:radial-gradient(circle,rgba(245,192,39,0.08) 0%,transparent 70%);bottom:-60px;left:30%}
+
+  /* PROGRESS BAR */
+  .progress-wrap{background:var(--off-white);border-bottom:1px solid var(--border);padding:0 64px;position:sticky;top:70px;z-index:100}
+  .progress-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:0;padding:20px 0}
+  .pstep{display:flex;align-items:center;flex:1}
+  .pstep-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border:2px solid var(--border);background:var(--white);color:var(--grey-text);transition:all 0.3s;flex-shrink:0;cursor:none}
+  .pstep.active .pstep-dot{border-color:var(--blue);background:var(--blue);color:var(--white)}
+  .pstep.done .pstep-dot{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+  .pstep-label{font-size:0.72rem;font-weight:600;color:var(--grey-text);margin-left:10px;white-space:nowrap}
+  .pstep.active .pstep-label,.pstep.done .pstep-label{color:var(--blue)}
+  .pline{flex:1;height:2px;background:var(--border);margin:0 10px;transition:background 0.3s;border-radius:2px}
+  .pline.done{background:var(--blue)}
+
+  /* FORM AREA */
+  .form-area{max-width:840px;margin:0 auto;padding:72px 64px}
+
+  /* STEP */
+  .step{display:none}
+  .step.active{display:block}
+
+  .step-intro{margin-bottom:40px}
+  .step-num{font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .step-num::before{content:'';width:18px;height:2px;background:var(--blue);border-radius:2px;display:block}
+  .step-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--ink);margin-bottom:10px}
+  .step-sub{font-size:0.9rem;color:var(--grey-text);font-weight:300;line-height:1.7}
+
+  /* FORM ELEMENTS */
+  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:0}
+  .fgrid .full{grid-column:1/-1}
+  .fg{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+  .fg label{font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .fg input,.fg select,.fg textarea{
+    width:100%;padding:12px 16px;
+    border:1.5px solid var(--border);border-radius:8px;
+    background:var(--white);color:var(--ink);
+    font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:400;
+    outline:none;cursor:none;appearance:none;
+    transition:border-color 0.2s,box-shadow 0.2s;
+  }
+  .fg input:focus,.fg select:focus,.fg textarea:focus{
+    border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,126,197,0.12);
+  }
+  .fg input::placeholder,.fg textarea::placeholder{color:var(--border);font-weight:300}
+  .fg textarea{resize:vertical;min-height:110px}
+  .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+
+  /* ROLE DISPLAY */
+  .selected-role-banner{display:flex;align-items:center;gap:14px;background:var(--blue-xlight);border:1.5px solid rgba(91,126,197,0.18);border-radius:10px;padding:14px 20px;margin-bottom:32px}
+  .srb-em{font-size:1.4rem}
+  .srb-name{font-size:0.88rem;font-weight:700;color:var(--ink)}
+  .srb-change{font-size:0.75rem;color:var(--blue);cursor:none;margin-left:auto;font-weight:600;text-decoration:underline}
+  .srb-change:hover{color:var(--blue-dark)}
+
+  /* SKILL CHECKBOXES */
+  .skill-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .skill-chip{padding:8px 16px;border:1.5px solid var(--border);border-radius:40px;font-size:0.76rem;font-weight:600;color:var(--grey-text);cursor:none;transition:all 0.2s;background:var(--white)}
+  .skill-chip.selected,.skill-chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+
+  /* UPLOAD ZONE */
+  .upload-zone{border:2px dashed var(--border-strong,#D0D9EE);border-radius:12px;padding:48px 32px;text-align:center;transition:border-color 0.2s,background 0.2s;cursor:none;position:relative;background:var(--off-white)}
+  .upload-zone.dragover{border-color:var(--blue);background:var(--blue-xlight)}
+  .upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:none;width:100%;height:100%}
+  .uz-icon{font-size:2.5rem;margin-bottom:16px;display:block}
+  .uz-title{font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+  .uz-sub{font-size:0.82rem;color:var(--grey-text);font-weight:300;line-height:1.6;margin-bottom:16px}
+  .uz-btn{display:inline-block;background:var(--white);border:1.5px solid var(--blue);color:var(--blue);padding:9px 22px;border-radius:6px;font-size:0.8rem;font-weight:700;cursor:none;transition:all 0.2s;pointer-events:none}
+  .uz-formats{font-size:0.7rem;color:var(--grey-text);margin-top:12px;font-weight:300}
+  .file-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .file-item{display:flex;align-items:center;gap:10px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.82rem}
+  .fi-icon{font-size:1rem;flex-shrink:0}
+  .fi-name{font-weight:500;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fi-size{font-size:0.72rem;color:var(--grey-text);flex-shrink:0}
+  .fi-rm{font-size:0.75rem;color:var(--grey-text);cursor:none;transition:color 0.2s;flex-shrink:0;padding:2px 6px;border-radius:4px}
+  .fi-rm:hover{color:var(--orange);background:rgba(232,131,74,0.08)}
+
+  /* URL LINKS */
+  .link-inputs{display:flex;flex-direction:column;gap:12px}
+  .link-row{display:flex;align-items:center;gap:12px}
+  .link-prefix{font-size:0.82rem;font-weight:600;color:var(--grey-text);flex-shrink:0;width:100px}
+  .link-row input{flex:1}
+  .add-link-btn{display:flex;align-items:center;gap:7px;font-size:0.8rem;font-weight:600;color:var(--blue);cursor:none;padding:8px 0;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color 0.2s}
+  .add-link-btn:hover{color:var(--blue-dark)}
+
+  /* STATEMENT */
+  .char-count{font-size:0.7rem;color:var(--grey-text);text-align:right;margin-top:5px}
+  .char-count.warn{color:var(--orange)}
+
+  /* REVIEW BOX */
+  .review-box{background:var(--off-white);border:1.5px solid var(--border);border-radius:12px;padding:28px;margin-bottom:20px}
+  .rb-title{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+  .rb-edit{font-size:0.75rem;color:var(--blue);cursor:none;text-decoration:underline}
+  .rb-edit:hover{color:var(--blue-dark)}
+  .rb-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.84rem}
+  .rb-row:last-child{border-bottom:none}
+  .rb-key{color:var(--grey-text);font-weight:400}
+  .rb-val{color:var(--ink);font-weight:600;text-align:right;max-width:60%}
+  .consent-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0}
+  .consent-cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;cursor:none;accent-color:var(--blue);margin-top:1px}
+  .consent-text{font-size:0.82rem;color:var(--grey-text);font-weight:300;line-height:1.65}
+  .consent-text a{color:var(--blue);text-decoration:none}
+
+  /* NAVIGATION BTNS */
+  .step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:28px;border-top:1px solid var(--border)}
+  .btn-back{background:transparent;color:var(--grey-text);border:1.5px solid var(--border);padding:12px 26px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:none;transition:all 0.2s;display:flex;align-items:center;gap:8px;text-decoration:none}
+  .btn-back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+  .btn-back:hover{border-color:var(--ink-soft);color:var(--ink-soft)}
+  .btn-next{background:var(--blue);color:var(--white);padding:12px 32px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:700;cursor:none;transition:all 0.25s;border:none;box-shadow:0 4px 14px rgba(91,126,197,0.22);display:flex;align-items:center;gap:8px}
+  .btn-next svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+  .btn-next:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 22px rgba(91,126,197,0.28)}
+  .btn-submit-final{background:var(--ink);color:var(--white);padding:14px 40px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;cursor:none;transition:all 0.25s;border:none;box-shadow:0 4px 14px rgba(26,29,46,0.2);display:flex;align-items:center;gap:8px}
+  .btn-submit-final:hover{background:#2A2E44;transform:translateY(-2px)}
+  .step-count{font-size:0.78rem;color:var(--grey-text);font-weight:500}
+
+  /* SUCCESS */
+  .success-screen{display:none;text-align:center;padding:80px 40px}
+  .success-confetti{font-size:4rem;margin-bottom:24px}
+  .success-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);font-weight:700;color:var(--ink);margin-bottom:16px}
+  .success-sub{font-size:0.96rem;line-height:1.82;color:var(--grey-text);max-width:480px;margin:0 auto 40px;font-weight:300}
+  .success-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:600px;margin:0 auto 40px;text-align:left}
+  .ss-item{background:var(--off-white);border:1.5px solid var(--border);border-radius:12px;padding:20px}
+  .ss-num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--blue);margin-bottom:8px}
+  .ss-text{font-size:0.78rem;color:var(--grey-text);font-weight:300;line-height:1.6}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.65s,transform 0.65s}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  /* FOOTER STRIP */
+  .footer-strip{background:var(--off-white);border-top:1px solid var(--border);padding:28px 64px;display:flex;justify-content:space-between;align-items:center}
+  .fs-copy{font-size:0.73rem;color:var(--grey-text)}
+  .fs-rk{display:flex;align-items:center;gap:8px;font-size:0.7rem;color:var(--grey-text);font-weight:500}
+  .fs-rk::before{content:'';display:block;width:16px;height:2px;background:var(--blue);border-radius:2px}
+
+  @media(max-width:1024px){
+    nav{padding:0 32px}
+    .page-hero{padding:108px 40px 64px}
+    .page-hero-inner{grid-template-columns:1fr;gap:48px}
+    .progress-wrap{padding:0 40px}
+    .form-area{padding:56px 40px}
+    .fgrid{grid-template-columns:1fr}
+    .footer-strip{padding:24px 40px}
+  }
+  @media(max-width:640px){
+    nav{padding:0 20px}
+    .nav-links li:not(:last-child):not(:first-child){display:none}
+    .page-hero{padding:92px 20px 48px}
+    .progress-wrap{padding:0 20px}
+    .pstep-label{display:none}
+    .form-area{padding:40px 20px}
+    .fgrid{grid-template-columns:1fr}
+    .success-steps{grid-template-columns:1fr}
+    .footer-strip{padding:20px;flex-direction:column;gap:8px;text-align:center}
+    .role-cards-hero{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="https://cdn.imgchest.com/files/a77d9e791b70.png" alt="Hansa Entertainment"></a>
+  <ul class="nav-links">
+    <li><a href="https://hansaentertainment.tiiny.site/" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back to Home</a></li>
+    <li><a href="https://hansaentertainment.tiiny.site/#ecosystem">Stories</a></li>
+    <li><a href="https://hansaentertainment.tiiny.site/#team">Team</a></li>
+    <li><a href="https://hansaentertainment.tiiny.site/connect.html">Connect</a></li>
+    <li><a href="https://hansaentertainment.tiiny.site/join.html" class="nav-cta">Join Universe</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-deco hd1"></div>
+  <div class="hero-deco hd2"></div>
+  <div class="page-hero-inner">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a><span>/</span>Join the Universe</div>
+      <h1 class="page-title">Your Story<br>Starts <em>Here.</em></h1>
+      <p class="page-sub">We are a home for rebels, poets, and tech-heads. Tell us who you are and what you create — and let's build something the world hasn't seen yet.</p>
+    </div>
+    <div class="role-cards-hero" id="heroRolePicker">
+      <div class="rc" data-role="writer" data-em="✍️" data-name="Writer" data-sub="Architect of Thought">
+        <span class="rc-em">✍️</span>
+        <div><div class="rc-name">Writer</div><div class="rc-sub">Architect of Thought</div></div>
+        <div class="rc-check">✓</div>
+      </div>
+      <div class="rc" data-role="filmmaker" data-em="🎬" data-name="Filmmaker" data-sub="Visionary Director">
+        <span class="rc-em">🎬</span>
+        <div><div class="rc-name">Filmmaker</div><div class="rc-sub">Visionary Director</div></div>
+        <div class="rc-check">✓</div>
+      </div>
+      <div class="rc" data-role="actor" data-em="🎭" data-name="Actor" data-sub="Soul of the Screen">
+        <span class="rc-em">🎭</span>
+        <div><div class="rc-name">Actor</div><div class="rc-sub">Soul of the Screen</div></div>
+        <div class="rc-check">✓</div>
+      </div>
+      <div class="rc" data-role="creator" data-em="📱" data-name="Digital Creator" data-sub="Digital Pioneer">
+        <span class="rc-em">📱</span>
+        <div><div class="rc-name">Digital Creator</div><div class="rc-sub">Digital Pioneer</div></div>
+        <div class="rc-check">✓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="pstep active" id="ps1">
+      <div class="pstep-dot">1</div>
+      <span class="pstep-label">Who You Are</span>
+    </div>
+    <div class="pline" id="pl1"></div>
+    <div class="pstep" id="ps2">
+      <div class="pstep-dot">2</div>
+      <span class="pstep-label">Your Craft</span>
+    </div>
+    <div class="pline" id="pl2"></div>
+    <div class="pstep" id="ps3">
+      <div class="pstep-dot">3</div>
+      <span class="pstep-label">Your Work</span>
+    </div>
+    <div class="pline" id="pl3"></div>
+    <div class="pstep" id="ps4">
+      <div class="pstep-dot">4</div>
+      <span class="pstep-label">Review &amp; Submit</span>
+    </div>
+  </div>
+</div>
+
+<!-- FORM AREA -->
+<div class="form-area">
+
+  <!-- STEP 1 — Who You Are -->
+  <div class="step active" id="step1">
+    <div class="step-intro">
+      <div class="step-num">Step 01</div>
+      <h2 class="step-title">Tell us about yourself</h2>
+      <p class="step-sub">Basic details so we know who we're talking to.</p>
+    </div>
+
+    <div id="selectedRoleBanner" style="display:none" class="selected-role-banner">
+      <span class="srb-em" id="sRoleEm"></span>
+      <div><div class="srb-name" id="sRoleName"></div></div>
+      <span class="srb-change" onclick="clearRole()">Change role</span>
+    </div>
+
+    <div class="fgrid">
+      <div class="fg">
+        <label>First Name *</label>
+        <input type="text" id="f_fname" placeholder="Priya" required>
+      </div>
+      <div class="fg">
+        <label>Last Name *</label>
+        <input type="text" id="f_lname" placeholder="Sharma" required>
+      </div>
+      <div class="fg">
+        <label>Email Address *</label>
+        <input type="email" id="f_email" placeholder="priya@example.com" required>
+      </div>
+      <div class="fg">
+        <label>Phone Number *</label>
+        <input type="tel" id="f_phone" placeholder="+91 98765 43210" required>
+      </div>
+      <div class="fg">
+        <label>City / Location *</label>
+        <input type="text" id="f_city" placeholder="Chennai, Tamil Nadu">
+      </div>
+      <div class="fg">
+        <label>Years of Experience</label>
+        <select id="f_exp">
+          <option value="" disabled selected>Select</option>
+          <option>Just starting out</option>
+          <option>1–2 years</option>
+          <option>3–5 years</option>
+          <option>6–10 years</option>
+          <option>10+ years</option>
+        </select>
+      </div>
+      <div class="fg full">
+        <label>Languages you work in</label>
+        <input type="text" id="f_languages" placeholder="Tamil, Hindi, English…">
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <span class="step-count">Step 1 of 4</span>
+      <button class="btn-next" onclick="goTo(2)">
+        Next: Your Craft
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — Craft & Skills -->
+  <div class="step" id="step2">
+    <div class="step-intro">
+      <div class="step-num">Step 02</div>
+      <h2 class="step-title">What's your craft?</h2>
+      <p class="step-sub">Tell us about your specialisation, skills, and what drives you as a creator.</p>
+    </div>
+
+    <div class="fg">
+      <label>Primary Role *</label>
+      <select id="f_role">
+        <option value="" disabled selected>Select your role</option>
+        <option value="screenwriter">Screenwriter</option>
+        <option value="dialogue">Dialogue Writer</option>
+        <option value="director">Director</option>
+        <option value="dop">Director of Photography</option>
+        <option value="editor">Video Editor</option>
+        <option value="actor">Actor / Performer</option>
+        <option value="voiceover">Voice Over Artist</option>
+        <option value="digital">Digital Content Creator</option>
+        <option value="podcast">Podcast Host</option>
+        <option value="composer">Music Composer</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label>Skills &amp; Specialisations <span style="font-weight:300;text-transform:none;letter-spacing:0">(select all that apply)</span></label>
+      <div class="skill-chips" id="skillChips">
+        <div class="skill-chip" onclick="toggleChip(this)">Feature Films</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Web Series / OTT</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Short Films</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Branded Content</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Vertical / Reels</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Documentary</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Podcast</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Comedy / Satire</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Drama / Thriller</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Romance</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Horror</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Animation</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Social Media</div>
+        <div class="skill-chip" onclick="toggleChip(this)">Spirituality / Wellness</div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Your Creative Statement * <span style="font-weight:300;text-transform:none;letter-spacing:0">(max 300 chars)</span></label>
+      <textarea id="f_statement" maxlength="300" rows="4" placeholder="What kind of stories do you tell? What's unique about your voice?" oninput="updateCount(this,'stCount')"></textarea>
+      <div class="char-count" id="stCount">0 / 300</div>
+    </div>
+
+    <div class="fg">
+      <label>Biggest project or work you're proud of</label>
+      <input type="text" id="f_proud" placeholder="Title, platform, or brief description">
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(1)">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back
+      </button>
+      <span class="step-count">Step 2 of 4</span>
+      <button class="btn-next" onclick="goTo(3)">
+        Next: Your Work
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 3 — Upload Work -->
+  <div class="step" id="step3">
+    <div class="step-intro">
+      <div class="step-num">Step 03</div>
+      <h2 class="step-title">Show us your work</h2>
+      <p class="step-sub">Upload your portfolio, showreel, script samples or any work that represents you best. You can also share links.</p>
+    </div>
+
+    <!-- File Upload -->
+    <div class="fg">
+      <label>Upload Files</label>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.mp4,.mov,.zip,.jpg,.jpeg,.png,.mp3" onchange="handleFiles(this.files)">
+        <span class="uz-icon">📁</span>
+        <div class="uz-title">Drop your files here</div>
+        <p class="uz-sub">Scripts, showreels, portfolios, photos — anything that shows your craft.<br>Up to 5 files.</p>
+        <span class="uz-btn">Browse Files</span>
+        <p class="uz-formats">PDF · DOC · MP4 · MOV · JPG · PNG · MP3 · ZIP &nbsp;|&nbsp; Max 50MB per file</p>
+      </div>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <!-- Links -->
+    <div class="fg" style="margin-top:28px">
+      <label>Share Links to Your Work</label>
+      <div class="link-inputs" id="linkInputs">
+        <div class="link-row">
+          <span class="link-prefix">Portfolio</span>
+          <input type="url" placeholder="https://yourwebsite.com">
+        </div>
+        <div class="link-row">
+          <span class="link-prefix">YouTube / Vimeo</span>
+          <input type="url" placeholder="https://youtube.com/...">
+        </div>
+        <div class="link-row">
+          <span class="link-prefix">Instagram</span>
+          <input type="url" placeholder="https://instagram.com/...">
+        </div>
+      </div>
+      <button class="add-link-btn" onclick="addLink()" type="button">+ Add another link</button>
+    </div>
+
+    <div class="fg" style="margin-top:8px">
+      <label>Anything else you want us to know?</label>
+      <textarea id="f_extra" rows="3" maxlength="500" placeholder="Awards, collaborations, projects in development, or just something you want to say..." oninput="updateCount(this,'exCount')"></textarea>
+      <div class="char-count" id="exCount">0 / 500</div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(2)">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back
+      </button>
+      <span class="step-count">Step 3 of 4</span>
+      <button class="btn-next" onclick="buildReview(); goTo(4)">
+        Review &amp; Submit
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — Review -->
+  <div class="step" id="step4">
+    <div class="step-intro">
+      <div class="step-num">Step 04</div>
+      <h2 class="step-title">Review your application</h2>
+      <p class="step-sub">Almost there! Take a moment to review your details before we send it off.</p>
+    </div>
+
+    <div class="review-box">
+      <div class="rb-title">
+        Personal Details
+        <span class="rb-edit" onclick="goTo(1)">Edit</span>
+      </div>
+      <div id="reviewPersonal"></div>
+    </div>
+
+    <div class="review-box">
+      <div class="rb-title">
+        Craft &amp; Skills
+        <span class="rb-edit" onclick="goTo(2)">Edit</span>
+      </div>
+      <div id="reviewCraft"></div>
+    </div>
+
+    <div class="review-box">
+      <div class="rb-title">
+        Work &amp; Portfolio
+        <span class="rb-edit" onclick="goTo(3)">Edit</span>
+      </div>
+      <div id="reviewWork"></div>
+    </div>
+
+    <div class="review-box" style="background:var(--blue-xlight);border-color:rgba(91,126,197,0.18)">
+      <div class="consent-row">
+        <input type="checkbox" class="consent-cb" id="consent1" required>
+        <label class="consent-text" for="consent1">I confirm that all the information and work samples provided are my own and I have the right to share them with Hansa Entertainment.</label>
+      </div>
+      <div class="consent-row">
+        <input type="checkbox" class="consent-cb" id="consent2">
+        <label class="consent-text" for="consent2">I agree to be contacted by Hansa Entertainment regarding potential collaborations. I understand my data will be handled per their <a href="#">Privacy Policy</a>.</label>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(3)">
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back
+      </button>
+      <span class="step-count">Step 4 of 4</span>
+      <button class="btn-submit-final" onclick="submitApplication()">
+        Submit Application 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-confetti">🎬</div>
+    <h2 class="success-title">Welcome to the Universe!</h2>
+    <p class="success-sub">Your application has been received. Our creative team reviews every submission personally and will be in touch within 5–7 business days.</p>
+    <div class="success-steps">
+      <div class="ss-item"><div class="ss-num">01</div><div class="ss-text">Our team reviews your work and profile</div></div>
+      <div class="ss-item"><div class="ss-num">02</div><div class="ss-text">We'll reach out via email to schedule a conversation</div></div>
+      <div class="ss-item"><div class="ss-num">03</div><div class="ss-text">If there's a fit, we start building together</div></div>
+    </div>
+    <a href="index.html" class="btn-blue" style="display:inline-block;margin-top:8px">← Back to Home</a>
+  </div>
+
+</div><!-- /form-area -->
+
+<!-- FOOTER STRIP -->
+<div class="footer-strip">
+  <p class="fs-copy">&copy; 2026 Hansa Entertainment. All rights reserved.</p>
+</div>
+
+<script>
+  // Cursor
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px'});
+  document.querySelectorAll('a,button,input,select,textarea,.rc,.skill-chip').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';cursor.style.transform='translate(-50%,-50%) scale(0.4)'});
+    el.addEventListener('mouseleave',()=>{ring.style.width='30px';ring.style.height='30px';cursor.style.transform='translate(-50%,-50%) scale(1)'});
+  });
+
+  // Role picker in hero
+  let selectedRole = {role:'',em:'',name:''};
+  document.querySelectorAll('.rc').forEach(rc=>{
+    rc.addEventListener('click',()=>{
+      document.querySelectorAll('.rc').forEach(r=>r.classList.remove('selected'));
+      rc.classList.add('selected');
+      selectedRole = {role:rc.dataset.role, em:rc.dataset.em, name:rc.dataset.name};
+      updateRoleBanner();
+      // auto-select matching role in step 2 dropdown
+      const sel=document.getElementById('f_role');
+      const map={writer:'screenwriter',filmmaker:'director',actor:'actor',creator:'digital'};
+      if(map[selectedRole.role]) sel.value=map[selectedRole.role];
+    });
+  });
+
+  function updateRoleBanner(){
+    if(!selectedRole.name) return;
+    document.getElementById('selectedRoleBanner').style.display='flex';
+    document.getElementById('sRoleEm').textContent=selectedRole.em;
+    document.getElementById('sRoleName').textContent='Applying as: '+selectedRole.name;
+  }
+  function clearRole(){
+    selectedRole={role:'',em:'',name:''};
+    document.querySelectorAll('.rc').forEach(r=>r.classList.remove('selected'));
+    document.getElementById('selectedRoleBanner').style.display='none';
+  }
+
+  // Step navigation
+  let currentStep=1;
+  function goTo(n){
+    document.getElementById('step'+currentStep).classList.remove('active');
+    document.getElementById('step'+n).classList.add('active');
+
+    // Update progress
+    for(let i=1;i<=4;i++){
+      const ps=document.getElementById('ps'+i);
+      ps.classList.remove('active','done');
+      if(i===n) ps.classList.add('active');
+      else if(i<n) ps.classList.add('done');
+      if(i<4){
+        document.getElementById('pl'+i).classList.toggle('done',i<n);
+      }
+    }
+    currentStep=n;
+    window.scrollTo({top:document.querySelector('.progress-wrap').offsetTop-80,behavior:'smooth'});
+  }
+
+  // Char count
+  function updateCount(el,countId){
+    const c=document.getElementById(countId);
+    c.textContent=el.value.length+' / '+el.maxLength;
+    c.classList.toggle('warn',el.value.length>el.maxLength*0.85);
+  }
+
+  // Skill chips
+  function toggleChip(el){ el.classList.toggle('selected'); }
+
+  // File upload
+  let uploadedFiles=[];
+  function handleFiles(files){
+    Array.from(files).slice(0,5).forEach(f=>{
+      if(uploadedFiles.length>=5) return;
+      uploadedFiles.push(f);
+    });
+    renderFileList();
+  }
+  function renderFileList(){
+    const list=document.getElementById('fileList');
+    list.innerHTML='';
+    uploadedFiles.forEach((f,i)=>{
+      const ext=f.name.split('.').pop().toUpperCase();
+      const icons={'PDF':'📄','MP4':'🎬','MOV':'🎬','DOC':'📝','DOCX':'📝','JPG':'🖼️','JPEG':'🖼️','PNG':'🖼️','MP3':'🎵','ZIP':'📦'};
+      const ic=icons[ext]||'📎';
+      const sz=f.size>1048576?(f.size/1048576).toFixed(1)+' MB':(f.size/1024).toFixed(0)+' KB';
+      list.innerHTML+=`<div class="file-item"><span class="fi-icon">${ic}</span><span class="fi-name">${f.name}</span><span class="fi-size">${sz}</span><span class="fi-rm" onclick="removeFile(${i})">✕</span></div>`;
+    });
+  }
+  function removeFile(i){ uploadedFiles.splice(i,1); renderFileList(); }
+
+  // Drag-drop
+  const uz=document.getElementById('uploadZone');
+  uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('dragover')});
+  uz.addEventListener('dragleave',()=>uz.classList.remove('dragover'));
+  uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('dragover');handleFiles(e.dataTransfer.files)});
+
+  // Add link row
+  function addLink(){
+    const container=document.getElementById('linkInputs');
+    const row=document.createElement('div');
+    row.className='link-row';
+    row.innerHTML='<span class="link-prefix">Other Link</span><input type="url" placeholder="https://">';
+    container.appendChild(row);
+  }
+
+  // Build review
+  function buildReview(){
+    const rv=(id,rows)=>{
+      let html='';
+      rows.forEach(r=>{ if(r.v) html+=`<div class="rb-row"><span class="rb-key">${r.k}</span><span class="rb-val">${r.v}</span></div>`; });
+      document.getElementById(id).innerHTML=html||'<div class="rb-row"><span class="rb-key">No data provided</span></div>';
+    };
+    rv('reviewPersonal',[
+      {k:'Name',v:[document.getElementById('f_fname').value,document.getElementById('f_lname').value].filter(Boolean).join(' ')},
+      {k:'Email',v:document.getElementById('f_email').value},
+      {k:'Phone',v:document.getElementById('f_phone').value},
+      {k:'City',v:document.getElementById('f_city').value},
+      {k:'Experience',v:document.getElementById('f_exp').value},
+      {k:'Languages',v:document.getElementById('f_languages').value},
+    ]);
+    const sel=document.getElementById('f_role');
+    const chips=[...document.querySelectorAll('.skill-chip.selected')].map(c=>c.textContent).join(', ');
+    rv('reviewCraft',[
+      {k:'Role',v:sel.options[sel.selectedIndex]?.text||''},
+      {k:'Creator Type',v:selectedRole.name||'—'},
+      {k:'Specialisations',v:chips||'None selected'},
+      {k:'Notable Work',v:document.getElementById('f_proud').value},
+    ]);
+    const fileNames=uploadedFiles.map(f=>f.name).join(', ');
+    const links=[...document.querySelectorAll('#linkInputs input')].map(i=>i.value).filter(Boolean).join(', ');
+    rv('reviewWork',[
+      {k:'Files Uploaded',v:uploadedFiles.length?`${uploadedFiles.length} file(s): ${fileNames}`:'None'},
+      {k:'Links Shared',v:links||'None'},
+    ]);
+  }
+
+  // Final submit
+  function submitApplication(){
+    if(!document.getElementById('consent1').checked){ alert('Please confirm your work ownership before submitting.'); return; }
+    document.querySelectorAll('.step').forEach(s=>s.style.display='none');
+    const ss=document.getElementById('successScreen');
+    ss.style.display='block';
+    ss.style.animation='fadeUp 0.6s ease forwards';
+    // Mark all progress steps done
+    for(let i=1;i<=4;i++) document.getElementById('ps'+i).classList.add('done');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // Reveal
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*100)});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
