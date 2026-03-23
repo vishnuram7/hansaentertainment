@@ -107,19 +107,19 @@
   .eco-desc{font-size:1rem;line-height:1.82;color:var(--grey-text);font-weight:300}
 
   /* MANIFESTO */
-  .manifesto{background:var(--ink);padding:120px 64px}
+  .manifesto{background:var(--ink);padding:120px 64px;overflow:hidden}
   .manifesto .s-label{color:var(--yellow)}
   .manifesto .s-label::before{background:var(--yellow)}
   .m-lines{margin:44px 0}
-  .m-row{display:flex;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.07)}
+  .m-row{display:flex;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;overflow:hidden}
   .m-row:last-child{border-bottom:none}
   .m-n{font-size:0.9rem;color:rgba(255,255,255,0.2);font-weight:500;width:30px;flex-shrink:0}
-  .m-w{font-family:'Playfair Display',serif;font-size:clamp(44px,6.5vw,108px);font-weight:700;color:var(--white);line-height:1;flex:1}
+  .m-w{font-family:'Playfair Display',serif;font-size:clamp(36px,6.5vw,108px);font-weight:700;color:var(--white);line-height:1;flex:1;min-width:0;word-break:break-word}
   .m-w.blue{color:var(--blue)}
   .m-w.teal{color:var(--teal)}
   .m-w.yellow{color:var(--yellow)}
-  .m-con{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(20px,2.4vw,36px);color:rgba(255,255,255,0.3)}
-  .m-pill{font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:40px;background:rgba(255,255,255,0.06);color:white;align-self:center;white-space:nowrap}
+  .m-con{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(16px,2.4vw,36px);color:rgba(255,255,255,0.3);flex-shrink:0}
+  .m-pill{font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:40px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);align-self:center;white-space:nowrap;flex-shrink:0}
   .m-foot{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:44px;border-top:1px solid rgba(255,255,255,0.07)}
   .m-quote{font-family:'Playfair Display',serif;font-size:1.35rem;font-style:italic;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.75}
 
@@ -252,6 +252,7 @@
     .otag:nth-child(4){bottom:40px;right:-10px}
     section{padding:60px 20px}
     .manifesto,.brands,.philosophy{padding:60px 20px}
+    .manifesto{overflow:hidden}
     .eco-grid,.cr-grid,.bo-grid,.team-grid,.stat-grid{grid-template-columns:1fr}
     footer{padding:48px 20px 0}
     .f-inner{grid-template-columns:1fr;gap:32px}
