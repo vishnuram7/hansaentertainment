@@ -107,20 +107,20 @@
   .eco-desc{font-size:1rem;line-height:1.82;color:var(--grey-text);font-weight:300}
 
   /* MANIFESTO */
-  .manifesto{background:var(--ink);padding:120px 64px;overflow:hidden}
+.manifesto{background:var(--ink);padding:120px 64px;overflow:hidden}
   .manifesto .s-label{color:var(--yellow)}
   .manifesto .s-label::before{background:var(--yellow)}
   .m-lines{margin:44px 0}
-  .m-row{display:flex;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;overflow:hidden}
+  .m-row{display:flex;align-items:center;gap:20px;padding:22px 0;border-bottom:1px solid rgba(255,255,255,0.07)}
   .m-row:last-child{border-bottom:none}
-  .m-n{font-size:0.9rem;color:rgba(255,255,255,0.2);font-weight:500;width:30px;flex-shrink:0}
-  .m-w{font-family:'Playfair Display',serif;font-size:clamp(36px,6.5vw,108px);font-weight:700;color:var(--white);line-height:1;flex:1;min-width:0;word-break:break-word}
+  .m-top{display:inline-flex;align-items:baseline;gap:16px}
+  .m-n{font-size:0.9rem;color:rgba(255,255,255,0.2);font-weight:500;width:32px;flex-shrink:0}
+  .m-w{font-family:'Playfair Display',serif;font-size:clamp(44px,6.5vw,108px);font-weight:700;color:var(--white);line-height:1;white-space:nowrap}
   .m-w.blue{color:var(--blue)}
   .m-w.teal{color:var(--teal)}
   .m-w.yellow{color:var(--yellow)}
-  .m-con{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(16px,2.4vw,36px);color:rgba(255,255,255,0.3);flex-shrink:0}
-  .m-pill{font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:40px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);align-self:center;white-space:nowrap;flex-shrink:0}
-  .m-foot{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:44px;border-top:1px solid rgba(255,255,255,0.07)}
+  .m-con{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,2.4vw,34px);color:rgba(255,255,255,0.3);white-space:nowrap;flex-shrink:0}
+  .m-pill{font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border-radius:40px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);white-space:nowrap;flex-shrink:0;margin-left:auto}  .m-foot{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:44px;border-top:1px solid rgba(255,255,255,0.07)}
   .m-quote{font-family:'Playfair Display',serif;font-size:1.35rem;font-style:italic;color:rgba(255,255,255,0.5);max-width:520px;line-height:1.75}
 
   /* LEGACY */
@@ -245,7 +245,8 @@
     .hero-orb-core img{width:170px}
     .eco-head,.legacy-wrap,.cr-head,.br-head{grid-template-columns:1fr;gap:44px}
     section{padding:80px 40px}
-    .manifesto{padding:80px 40px}
+    .manifesto{padding:80px 40px;overflow:hidden}
+    .manifesto .inner{overflow:hidden}
     .brands{padding:80px 40px}
     .philosophy{padding:80px 40px}
     footer{padding:64px 40px 0}
@@ -269,16 +270,21 @@
     .otag:nth-child(4){bottom:40px;right:-10px}
     section{padding:60px 20px}
     .manifesto,.brands,.philosophy{padding:60px 20px}
-    .manifesto{overflow:hidden}
+    .manifesto .inner{overflow:hidden}
+    .m-row{flex-direction:column;align-items:flex-start;gap:2px;padding:20px 0}
+    .m-n{display:none}
+    .m-top{display:flex;align-items:baseline;gap:12px}
+    .m-w{font-size:clamp(36px,11vw,52px);line-height:1.1;white-space:nowrap}
+    .m-con{font-size:0.95rem}
+    .m-pill{font-size:0.65rem;padding:4px 10px;margin-top:6px;margin-left:0;align-self:flex-start}
+    .m-foot{flex-direction:column;gap:20px;align-items:flex-start}
+    .m-quote{font-size:1rem;max-width:100%}
     .eco-grid,.cr-grid,.bo-grid,.team-grid,.stat-grid{grid-template-columns:1fr}
     footer{padding:48px 20px 0}
     .f-inner{grid-template-columns:1fr;gap:32px}
     .f-bottom{flex-direction:column;gap:8px;text-align:center;padding:20px 0}
     .trust{padding:20px;gap:20px;flex-direction:column}
     .tdiv{display:none}
-    .m-w{font-size:clamp(32px,10vw,64px)}
-    .m-pill{display:none}
-    .m-foot{flex-direction:column;gap:24px}
     .br-btns{flex-direction:column}
   }
 </style>
@@ -386,29 +392,26 @@
     <div class="m-lines">
       <div class="m-row reveal">
         <span class="m-n">01</span>
-        <span class="m-w blue">Stories</span>
-        <span class="m-con">are</span>
+        <span class="m-top"><span class="m-w blue">Stories</span><span class="m-con">are</span></span>
         <span class="m-w">Changing</span>
         <span class="m-pill">Narrative</span>
       </div>
       <div class="m-row reveal">
         <span class="m-n">02</span>
-        <span class="m-w">Screens</span>
-        <span class="m-con">are</span>
+        <span class="m-top"><span class="m-w">Screens</span><span class="m-con">are</span></span>
         <span class="m-w teal">Changing</span>
         <span class="m-pill">Platform</span>
       </div>
       <div class="m-row reveal">
         <span class="m-n">03</span>
-        <span class="m-w yellow">Attention</span>
-        <span class="m-con">is</span>
+        <span class="m-top"><span class="m-w yellow">Attention</span><span class="m-con">is</span></span>
         <span class="m-w">Changing</span>
         <span class="m-pill">Audience</span>
       </div>
     </div>
     <div class="m-foot reveal">
-      <p class="m-quote">"We don't just follow the shift - we architect it. Every format, every platform, every screen is an opportunity to tell a story that lasts."</p>
-      <img src="https://cdn.imgchest.com/files/a77d9e791b70.png" alt="Hansa" style="height:48px;opacity:0.25;filter:brightness(10)">
+      <p class="m-quote">"We don't just follow the shift — we architect it. Every format, every platform, every screen is an opportunity to tell a story that lasts."</p>
+      <img src="logo.png" alt="Hansa" style="height:48px;opacity:0.25;filter:brightness(10)">
     </div>
   </div>
 </section>
