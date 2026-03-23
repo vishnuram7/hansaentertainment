@@ -146,6 +146,23 @@
   .tr{display:inline-block;font-size:0.8rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--blue);background:var(--blue-light);padding:6px 14px;border-radius:40px;margin-bottom:22px}
   .tdivider{width:32px;height:2px;background:var(--border);margin-bottom:18px}
   .tb{font-size:1rem;line-height:1.82;color:var(--grey-text);font-weight:300}
+ /* Photo frame wrapper */
+  .ta-wrap{width:110px;height:110px;border-radius:50%;margin-bottom:28px;position:relative;flex-shrink:0}
+  .ta-ring{position:absolute;inset:-4px;border-radius:50%;padding:3px;background:var(--ring-grad, linear-gradient(135deg,#5B7EC5,#3D5EA0));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),white calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),white calc(100% - 3px))}
+  /* Simpler ring approach */
+  .ta-wrap{box-shadow:0 0 0 3px var(--ca, var(--blue)), 0 0 0 6px rgba(255,255,255,1), 0 8px 28px rgba(0,0,0,0.10)}
+
+  /* The circle itself — holds either img or the letter fallback */
+  .ta{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;color:var(--white);overflow:hidden;background:var(--ta-bg, linear-gradient(135deg,#5B7EC5,#3D5EA0));flex-shrink:0;margin-bottom:28px;box-shadow:0 0 0 3px var(--ca, var(--blue)), 0 0 0 6px var(--white), 0 8px 28px rgba(0,0,0,0.10);transition:box-shadow 0.3s}
+  .ta img{width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;display:block}
+
+  /* When photo loads, hide the initial letter */
+  .ta img + span{display:none}
+
+  .tn{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+  .tr{display:inline-block;font-size:0.8rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--blue);background:var(--blue-light);padding:6px 14px;border-radius:40px;margin-bottom:22px}
+  .tdivider{width:32px;height:2px;background:var(--border);margin-bottom:18px}
+  .tb{font-size:1rem;line-height:1.82;color:var(--grey-text);font-weight:300}
 
   /* CREATORS */
   .creators{background:var(--off-white)}
