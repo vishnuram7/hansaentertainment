@@ -28,7 +28,76 @@
   html{scroll-behavior:smooth}
   body{background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:400;overflow-x:hidden;cursor:none}
 
-  /* CURSOR */
+  /* ── INTRO OVERLAY ── */
+  #intro{
+    position:fixed;inset:0;z-index:10000;
+    background:#000;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:opacity 0.8s ease;
+  }
+  #intro.fade-out{opacity:0;pointer-events:none}
+  #intro.gone{display:none}
+
+  /* Video fills screen */
+  #intro-video{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    opacity:1;
+    transition:opacity 1s ease;
+  }
+  #intro-video.hide{opacity:0}
+
+  /* Dark overlay behind logo reveal */
+  #intro-dark{
+    position:absolute;inset:0;
+    background:white;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  #intro-dark.show{opacity:1}
+
+  /* Centre logo */
+  #intro-logo{
+    position:relative;z-index:2;
+    opacity:0;
+    transform:scale(0.85);
+    transition:opacity 0.9s ease,transform 0.9s ease;
+    display:flex;flex-direction:column;align-items:center;gap:24px;
+  }
+  #intro-logo.show{opacity:1;transform:scale(1)}
+  #intro-logo img{width:min(340px,70vw)}
+  #intro-scroll-hint{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    opacity:0;transition:opacity 0.6s ease;
+  }
+  #intro-scroll-hint.show{opacity:1}
+  #intro-scroll-hint span{
+    font-size:0.7rem;font-weight:600;letter-spacing:0.25em;
+    text-transform:uppercase;color:black;
+  }
+  .scroll-arrow{
+    width:1px;height:44px;
+    background:linear-gradient(to bottom,black,transparent);
+    animation:scrollDrop 1.6s ease-in-out infinite;
+  }
+  @keyframes scrollDrop{
+    0%{transform:scaleY(0);transform-origin:top;opacity:0}
+    50%{transform:scaleY(1);transform-origin:top;opacity:1}
+    100%{transform:scaleY(1);transform-origin:bottom;opacity:0}
+  }
+
+  /* Logo flight animation — from centre to nav */
+  #intro-logo.fly-to-nav{
+    transition:all 0.75s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* Hide nav logo initially — shown after intro */
+  #navbar{opacity:0;transition:opacity 0.5s ease}
+  #navbar.visible{opacity:1}
+  /* While intro plays, lock body scroll */
+  body.intro-active{overflow:hidden}
   .cursor{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,background 0.2s}
   .cursor-ring{width:30px;height:30px;border:1.5px solid rgba(91,126,197,0.45);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.22s ease}
 
@@ -290,10 +359,24 @@
   }
 </style>
 </head>
-<body>
+<body class="intro-active">
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── INTRO OVERLAY ── -->
+<div id="intro">
+  <!-- Swap src with your actual video URL -->
+  <video id="intro-video" src="logo.mp4" autoplay muted playsinline preload="auto"></video>
+  <div id="intro-dark"></div>
+  <div id="intro-logo">
+    <img src="https://cdn.imgchest.com/files/a77d9e791b70.png" alt="Hansa Entertainment" id="intro-logo-img">
+    <div id="intro-scroll-hint">
+      <div class="scroll-arrow"></div>
+      <span>Scroll to enter</span>
+    </div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -639,20 +722,95 @@
 </footer>
 
 <script>
+  /* ── INTRO SEQUENCE ── */
+  const intro       = document.getElementById('intro');
+  const introVideo  = document.getElementById('intro-video');
+  const introDark   = document.getElementById('intro-dark');
+  const introLogo   = document.getElementById('intro-logo');
+  const scrollHint  = document.getElementById('intro-scroll-hint');
+  const navbar      = document.getElementById('navbar');
+  const navLogoImg  = navbar.querySelector('.nav-logo img');
+
+  let introComplete = false;
+
+  function revealLogo() {
+    // 1. Fade video out, fade dark overlay in
+    introVideo.classList.add('hide');
+    introDark.classList.add('show');
+    // 2. After dark settles, show centre logo
+    setTimeout(() => {
+      introLogo.classList.add('show');
+      setTimeout(() => scrollHint.classList.add('show'), 600);
+    }, 700);
+    introComplete = true;
+  }
+
+  function dismissIntro() {
+    if (!introComplete) return;
+
+    // Hide scroll hint
+    scrollHint.style.opacity = '0';
+
+    // Get nav logo position as target
+    const navRect   = navLogoImg.getBoundingClientRect();
+    const logoRect  = introLogo.getBoundingClientRect();
+
+    // Calculate transform to fly intro-logo to nav logo position
+    const dx = (navRect.left + navRect.width  / 2) - (logoRect.left + logoRect.width  / 2);
+    const dy = (navRect.top  + navRect.height / 2) - (logoRect.top  + logoRect.height / 2);
+    const scaleX = navRect.width  / logoRect.width;
+    const scaleY = navRect.height / logoRect.height;
+    const scale  = Math.min(scaleX, scaleY);
+
+    introLogo.classList.add('fly-to-nav');
+    introLogo.style.transform = `translate(${dx}px,${dy}px) scale(${scale})`;
+    introLogo.style.opacity   = '0';
+
+    // Show nav
+    navbar.classList.add('visible');
+
+    // Fade whole overlay out then remove
+    setTimeout(() => {
+      intro.classList.add('fade-out');
+      document.body.classList.remove('intro-active');
+    }, 500);
+    setTimeout(() => intro.classList.add('gone'), 1300);
+  }
+
+  // If video has a src — play it, then reveal logo on end
+  if (introVideo.src && introVideo.src !== window.location.href) {
+    introVideo.addEventListener('ended', revealLogo);
+    introVideo.addEventListener('error', revealLogo); // fallback if video fails
+  } else {
+    // No video src — skip straight to logo after brief pause
+    setTimeout(revealLogo, 600);
+  }
+
+  // Scroll or any key dismisses the intro once logo is showing
+  window.addEventListener('wheel',    () => dismissIntro(), { passive: true });
+  window.addEventListener('touchmove',() => dismissIntro(), { passive: true });
+  window.addEventListener('keydown',  () => dismissIntro());
+  document.getElementById('intro-scroll-hint').addEventListener('click', dismissIntro);
+
+  /* ── CURSOR ── */
   const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
+  const ring   = document.getElementById('cursorRing');
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
-    ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px';
+    ring.style.left   = e.clientX+'px'; ring.style.top   = e.clientY+'px';
   });
   document.querySelectorAll('a,button,.eco-card,.tc,.cc,.bo,.sc').forEach(el => {
     el.addEventListener('mouseenter', () => { ring.style.width='52px'; ring.style.height='52px'; cursor.style.transform='translate(-50%,-50%) scale(0.4)'; });
     el.addEventListener('mouseleave', () => { ring.style.width='30px'; ring.style.height='30px'; cursor.style.transform='translate(-50%,-50%) scale(1)'; });
   });
+
+  /* ── SCROLL REVEAL ── */
   const obs = new IntersectionObserver(entries => {
     entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),(i%5)*90); });
   }, { threshold: 0.1, rootMargin:'0px 0px -36px 0px' });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── NAV SHADOW ON SCROLL ── */
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
