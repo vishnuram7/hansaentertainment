@@ -751,8 +751,8 @@
 <!-- ── INTRO OVERLAY ── -->
 <div id="intro">
   <!-- Swap src with your actual video URL -->
-    <video id="intro-video" src="Logo.mp4" autoplay muted playsinline preload="auto"></video>
- <div id="intro-dark"></div>
+<video id="intro-video" autoplay muted playsinline preload="auto"></video> <div id="intro-dark"></div>
+  <div id="intro-dark"></div>
   <div id="intro-logo">
   <div id="particle-image-container">
   <img id="intro-logo-img" src="./logo.png" alt="Hansa Entertainment" crossorigin="anonymous">
@@ -1200,6 +1200,17 @@
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
   </script>
+  <script>
+  const introVideo = document.getElementById('intro-video');
+
+  const desktopIntroSrc = "logo2.mp4";
+  const mobileIntroSrc = "logom.mp4";
+
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  introVideo.src = isMobile ? mobileIntroSrc : desktopIntroSrc;
+  introVideo.load();
+</script>
   <script>
 function initImageParticles() {
   const img = document.getElementById('intro-logo-img');
