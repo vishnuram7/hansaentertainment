@@ -304,14 +304,20 @@
   .reveal.visible{opacity:1;transform:translateY(0)}
   
 #intro-logo{
-  position:absolute;
-  inset:0;
+  position:relative;
+  z-index:2;
+  opacity:1;
+  transform:none;
+  transition:none;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  z-index:3;
-  gap:42px;
+  gap:24px;
+}
+
+#intro-logo.show{
+  opacity:1;
+  transform:none;
 }
 
 #particle-image-container{
@@ -1118,16 +1124,12 @@
 
   let introComplete = false;
 
-  function revealLogo() {
-    // 1. Fade video out, fade dark overlay in
-    introVideo.classList.add('hide');
-    introDark.classList.add('show');
-    // 2. After dark settles, show centre logo
-    setTimeout(() => {
-      introLogo.classList.add('show');
-      setTimeout(() => scrollHint.classList.add('show'), 600);
-    }, 700);
-    introComplete = true;
+ function revealLogo() {
+  introVideo.classList.add('hide');
+  introDark.classList.add('show');
+  scrollHint.classList.add('show');
+  introComplete = true;
+}
   }
 
   function dismissIntro() {
