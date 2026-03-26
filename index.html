@@ -893,7 +893,7 @@
       </div>
     </div>
     <div class="m-foot reveal">
-      <p class="m-quote">"We don't just follow the shift — we architect it. Every format, every platform, every screen is an opportunity to tell a story that lasts."</p>
+      <p class="m-quote">"We don't just follow the shift — we architect it. Every format, every platform, every screen is an opportunity to tell a story that lives on."</p>
       <img src="./logo.png" alt="Hansa" style="height:48px;opacity:0.25;filter:brightness(10)">
     </div>
   </div>
@@ -1124,11 +1124,15 @@
 
   let introComplete = false;
 
- function revealLogo() {
-  introVideo.classList.add('hide');
-  introDark.classList.add('show');
-  scrollHint.classList.add('show');
-  introComplete = true;
+function revealLogo() {
+    // 1. Fade video out, fade dark overlay in
+    introVideo.classList.add('hide');
+    introDark.classList.add('show');
+    // 2. After dark settles, show centre logo
+    setTimeout(() => {
+  setTimeout(() => scrollHint.classList.add('show'), 600);
+}, 700);
+    introComplete = true;
   }
 
   function dismissIntro() {
