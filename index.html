@@ -60,13 +60,19 @@
 
   /* Centre logo */
   #intro-logo{
-    position:relative;z-index:2;
-    opacity:0;
-    transform:scale(0.85);
-    transition:opacity 0.9s ease,transform 0.9s ease;
-    display:flex;flex-direction:column;align-items:center;gap:24px;
-  }
-  #intro-logo.show{opacity:1;transform:scale(1)}
+  position:relative;
+  z-index:2;
+  opacity:0;      /* HIDDEN initially */
+  transform:none;
+  transition:none; /* NO animation */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+}
+#intro-logo.show{
+  opacity:1;   /* INSTANT ON */
+}
   #intro-logo > img{width:min(340px,70vw)}
   #intro-scroll-hint{
     display:flex;flex-direction:column;align-items:center;gap:8px;
@@ -963,7 +969,7 @@
           <img src="4.png" alt="Barath" onerror="this.style.display='none'">
         </div>
         <div class="tn">Barath Neelakandan</div>
-        <span class="tr" style="color:#A07010;background:rgba(245,192,39,0.12)">Growth & Strategy Head</span>
+        <span class="tr" style="color:#A07010;background:rgba(245,192,39,0.12)">Contributing Content Lead</span>
         <div class="tdivider"></div>
         <p class="tb">A filmmaker, actor, and writer with over a decade of experience in directing, screenwriting, and executive production. Barath is known for his out-of-the-box debut film K-13. He brings a strong storytelling sensibility combined with deep expertise in end-to-end content development. At Hansa, he contributes to vertical drama stories and  shapes compelling narratives across formats for contemporary audiences.</p>
       </div>
@@ -1139,8 +1145,8 @@ function revealLogo() {
     introVideo.classList.add('hide');
     introDark.classList.add('show');
     // 2. After dark settles, show centre logo
-    setTimeout(() => {
-  setTimeout(() => scrollHint.classList.add('show'), 600);
+    introLogo.classList.add('show');
+scrollHint.classList.add('show');
 }, 700);
     introComplete = true;
   }
