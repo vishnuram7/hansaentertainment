@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect — Hansa Entertainment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('NZ2IJGolsLf8lBKIT');</script>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+
+<!-- NAV -->
+<nav id="navbar" class="visible">
+  <a href="https://vishnuram7.github.io/hansaentertainment/" class="nav-logo">
+    <img src="https://cdn.imgchest.com/files/a77d9e791b70.png" alt="Hansa Entertainment">
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://vishnuram7.github.io/hansaentertainment/" class="nav-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back to Home
+    </a></li>
+    <li><a href="https://vishnuram7.github.io/hansaentertainment/#ecosystem">Stories</a></li>
+    <li><a href="https://vishnuram7.github.io/hansaentertainment/#team">Team</a></li>
+    <li><a href="https://vishnuram7.github.io/hansaentertainment/join.html">Join Universe</a></li>
+    <li><a href="https://vishnuram7.github.io/hansaentertainment/connect.html" class="nav-cta">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="hero-deco hd1"></div>
+  <div class="hero-deco hd2"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="https://vishnuram7.github.io/hansaentertainment/">Home</a>
+      <span>/</span>Connect
+    </div>
+    <h1 class="page-title">Let's Build<br><em>Something Together</em></h1>
+    <p class="page-sub">Whether you're a brand, a filmmaker, a platform, or just someone with a story — we'd love to hear from you. Tell us what you have in mind.</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="connect-body-wrap">
+<div class="main">
+
+  <!-- FORM -->
+  <div class="form-wrap reveal">
+    <h2 class="form-section-title">Send us a message</h2>
+    <p class="form-section-sub">We read every message. You'll hear from us within 2 business days.</p>
+
+    <div class="inquiry-tabs" id="tabs">
+      <button class="itab active" data-type="general">General Inquiry</button>
+      <button class="itab" data-type="brand">Brand Partnership</button>
+      <button class="itab" data-type="pitch">Pitch a Project</button>
+      <button class="itab" data-type="press">Press &amp; Media</button>
+    </div>
+
+    <form id="contactForm">
+      <div class="form-grid">
+        <div class="fgroup">
+          <label>First Name *</label>
+          <input type="text" id="firstName" placeholder="Arun" required>
+        </div>
+        <div class="fgroup">
+          <label>Last Name *</label>
+          <input type="text" id="lastName" placeholder="Kumar" required>
+        </div>
+        <div class="fgroup">
+          <label>Email Address *</label>
+          <input type="email" id="email" placeholder="arun@example.com" required>
+        </div>
+        <div class="fgroup">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210">
+        </div>
+        <div class="fgroup full">
+          <label>Organisation / Company</label>
+          <input type="text" id="org" placeholder="Your company or project name">
+        </div>
+        <div class="fgroup full">
+          <label>Subject *</label>
+          <input type="text" id="subjectField" placeholder="What's this about?" required>
+        </div>
+        <div class="fgroup full" id="budgetGroup" style="display:none">
+          <label>Approximate Budget</label>
+          <select id="budget">
+            <option value="" disabled selected>Select a range</option>
+            <option>Under ₹10 Lakhs</option>
+            <option>₹10L – ₹50L</option>
+            <option>₹50L – ₹1 Crore</option>
+            <option>₹1 Crore +</option>
+            <option>Let's discuss</option>
+          </select>
+        </div>
+        <div class="fgroup full">
+          <label>Your Message *</label>
+          <textarea id="messageField" placeholder="Tell us what you have in mind..." required></textarea>
+        </div>
+        <div class="fgroup full">
+          <label>How did you hear about us?</label>
+          <select id="source">
+            <option value="" disabled selected>Select an option</option>
+            <option>Social Media</option>
+            <option>Search Engine</option>
+            <option>Referral / Word of Mouth</option>
+            <option>Industry Event</option>
+            <option>Press / Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn-submit" id="submitBtn">Send Message →</button>
+      </div>
+      <p class="form-note">🔒 Your information is safe with us. We never share your details.</p>
+    </form>
+
+    <!-- Success -->
+    <div class="success-msg" id="successMsg">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Message Received!</div>
+      <p class="success-sub">Thank you for reaching out. Our team will get back to you within 2 business days.</p>
+    </div>
+  </div>
+
+  <!-- INFO SIDE -->
+  <div class="info-side reveal">
+
+    <!-- Address + Map -->
+    <div class="info-card">
+      <div class="info-card-title">Our Studio</div>
+      <div class="address-block">
+        <div class="addr-icon">📍</div>
+        <div>
+          <div class="addr-title">Hansa Entertainment</div>
+          <div class="addr-text">19, Wheatcrofts Road<br>Nungambakkam<br>Chennai, Tamil Nadu 600034</div>
+          <a href="https://maps.google.com/?q=13.064872,80.242710" target="_blank" class="addr-link">
+            Get Directions
+            <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d485.4!2d80.24271039999999!3d13.064872399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDAzJzUzLjUiTiA4MMKwMTQnMzMuOCJF!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Hansa Entertainment Location">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Connect Options -->
+    <div class="info-card">
+      <div class="info-card-title">Reach Out Directly</div>
+      <div class="connect-opts">
+        <a href="mailto:info@hansaentertainment.com" class="co">
+          <div class="co-icon" style="background:rgba(198,155,99,0.12)">✉️</div>
+          <div><div class="co-label">Email</div><div class="co-val">info@hansaentertainment.com</div></div>
+        </a>
+        <a href="tel:+914400000000" class="co">
+          <div class="co-icon" style="background:rgba(115,69,34,0.15)">📞</div>
+          <div><div class="co-label">Phone</div><div class="co-val">+91 44 0000 0000</div></div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="co">
+          <div class="co-icon" style="background:rgba(232,131,74,0.12)">📸</div>
+          <div><div class="co-label">Instagram</div><div class="co-val">@hansaentertainment</div></div>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="co">
+          <div class="co-icon" style="background:rgba(107,191,94,0.12)">💼</div>
+          <div><div class="co-label">LinkedIn</div><div class="co-val">Hansa Entertainment</div></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- FOOTER STRIP -->
+<div class="footer-strip">
+  <p class="fs-copy">&copy; 2026 Hansa Entertainment. All rights reserved.</p>
+</div>
+
+<script>
+  // ── Cursor ──
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    ring.style.left   = e.clientX + 'px'; ring.style.top   = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button,input,select,textarea,.co').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '50px'; ring.style.height = '50px';
+      cursor.style.transform = 'translate(-50%,-50%) scale(0.4)';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '30px'; ring.style.height = '30px';
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+
+  // ── Nav scroll ──
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ── Reveal on scroll ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 120);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // ── Inquiry tabs ──
+  const tabs        = document.querySelectorAll('.itab');
+  const subjectFld  = document.getElementById('subjectField');
+  const messageFld  = document.getElementById('messageField');
+  const budgetGroup = document.getElementById('budgetGroup');
+  let   activeType  = 'general';
+
+  const placeholders = {
+    general : { subject: "What's this about?",                   message: 'Tell us what you have in mind...' },
+    brand   : { subject: 'Brand partnership opportunity',        message: "Tell us about your brand and what kind of content partnership you're looking for..." },
+    pitch   : { subject: 'Project pitch — [Your Project Name]', message: 'Give us a brief — the story, format, language, and what you need from us...' },
+    press   : { subject: 'Press inquiry',                        message: 'Publication name, story angle, and deadline if applicable...' },
+  };
+  const tabLabels = {
+    general : 'General Inquiry',
+    brand   : 'Brand Partnership',
+    pitch   : 'Pitch a Project',
+    press   : 'Press & Media',
+  };
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeType = tab.dataset.type;
+      subjectFld.placeholder = placeholders[activeType].subject;
+      messageFld.placeholder = placeholders[activeType].message;
+      budgetGroup.style.display = (activeType === 'brand' || activeType === 'pitch') ? 'flex' : 'none';
+    });
+  });
+
+  // ── EmailJS Submit ──
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const phone     = document.getElementById('phone').value.trim();
+    const org       = document.getElementById('org').value.trim();
+    const subject   = subjectFld.value.trim();
+    const budget    = document.getElementById('budget').value || 'N/A';
+    const message   = messageFld.value.trim();
+    const source    = document.getElementById('source').value || 'Not specified';
+
+    if (!firstName || !email || !subject || !message) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    const templateParams = {
+      from_name    : firstName + ' ' + lastName,
+      from_email   : email,
+      phone        : phone   || 'Not provided',
+      org          : org     || 'Not provided',
+      inquiry_type : tabLabels[activeType],
+      subject      : subject,
+      budget       : budget,
+      message      : message,
+      source       : source,
+    };
+
+    emailjs.send('service_w073drg', 'template_7kcclbn', templateParams)
+      .then(() => {
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('successMsg').style.display  = 'flex';
+      })
+      .catch(err => {
+        console.error('EmailJS error:', err);
+        btn.textContent = 'Send Message →';
+        btn.disabled    = false;
+        alert('Something went wrong. Please try again or email us directly.');
+      });
+  });
+</script>
+</body>
+</html>
