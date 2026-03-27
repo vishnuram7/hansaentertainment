@@ -1125,7 +1125,8 @@
   const scrollHint  = document.getElementById('intro-scroll-hint');
   const navbar      = document.getElementById('navbar');
   const navLogoImg  = navbar.querySelector('.nav-logo img');
-
+const introKey = "hansa_intro_seen_date";
+const todayKey = new Date().toISOString().slice(0, 10);
   let introComplete = false;
 
 function revealLogo() {
@@ -1140,7 +1141,7 @@ scrollHint.classList.add('show');
 
   function dismissIntro() {
     if (!introComplete) return;
-
+ localStorage.setItem(introKey, todayKey);
     // Hide scroll hint
     scrollHint.style.opacity = '0';
 
@@ -1169,6 +1170,20 @@ scrollHint.classList.add('show');
     }, 500);
     setTimeout(() => intro.classList.add('gone'), 1300);
   }
+  if (localStorage.getItem(introKey) === todayKey) {
+  skipIntroImmediately();
+} else {
+  introVideo.src = isMobile ? mobileIntroSrc : desktopIntroSrc;
+  introVideo.load();
+
+  introVideo.addEventListener('ended', revealLogo);
+  introVideo.addEventListener('error', revealLogo);
+
+  window.addEventListener('wheel', dismissIntro, { passive: true });
+  window.addEventListener('touchmove', dismissIntro, { passive: true });
+  window.addEventListener('keydown', dismissIntro);
+  scrollHint.addEventListener('click', dismissIntro);
+}
 
   // If video has a src — play it, then reveal logo on end
   if (introVideo.src && introVideo.src !== window.location.href) {
