@@ -84,8 +84,7 @@
 
   if (!btn || !video) return;
 
-  btn.addEventListener('click', function () {
-    video.muted = !video.muted;
+  function updateMuteUI() {
     if (video.muted) {
       iconMuted.style.display = '';
       iconUnmuted.style.display = 'none';
@@ -97,7 +96,25 @@
       btn.setAttribute('aria-label', 'Mute video');
       btn.setAttribute('title', 'Mute');
     }
+  }
+
+  btn.addEventListener('click', async function () {
+    try {
+      if (video.muted) {
+        video.muted = false;
+        video.volume = 1;
+        await video.play(); // important for browser audio unlock
+      } else {
+        video.muted = true;
+      }
+
+      updateMuteUI();
+    } catch (err) {
+      console.error('Audio toggle failed:', err);
+    }
   });
+
+  updateMuteUI();
 })();
 </script>
 
