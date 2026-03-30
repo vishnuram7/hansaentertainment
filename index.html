@@ -139,56 +139,11 @@
       console.error('Audio toggle failed:', err);
     }
   });
-
   video.addEventListener('ended', hideMuteButton);
-
   window.hideIntroMuteButton = hideMuteButton;
-
   updateMuteUI();
 })();
-  function skipIntroImmediately() {
-  intro.classList.add('gone');
-  navbar.classList.add('visible');
-  document.body.classList.remove('intro-active');
-  introComplete = true;
-  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
-}
-
-function dismissIntro() {
-  if (!introComplete) return;
-
-  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
-
-  localStorage.setItem(introKey, todayKey);
-  scrollHint.style.opacity = '0';
-
-  const navRect = navLogoImg.getBoundingClientRect();
-  const logoRect = introLogo.getBoundingClientRect();
-
-  const dx = (navRect.left + navRect.width / 2) - (logoRect.left + logoRect.width / 2);
-  const dy = (navRect.top + navRect.height / 2) - (logoRect.top + logoRect.height / 2);
-  const scaleX = navRect.width / logoRect.width;
-  const scaleY = navRect.height / logoRect.height;
-  const scale = Math.min(scaleX, scaleY);
-
-  introLogo.classList.add('fly-to-nav');
-  introLogo.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-  introLogo.style.opacity = '0';
-
-  navbar.classList.add('visible');
-
-  setTimeout(() => {
-    intro.classList.add('fade-out');
-    document.body.classList.remove('intro-active');
-  }, 500);
-
-  setTimeout(() => {
-    intro.classList.add('gone');
-  }, 1300);
-}
 </script>
-
-
 <!-- NAV -->
 <nav id="navbar">
   <a href="index.html" class="nav-logo">
@@ -720,12 +675,13 @@ function dismissIntro() {
   const todayKey = new Date().toISOString().slice(0, 10);
   let introComplete = false;
 
-  function skipIntroImmediately() {
-    intro.classList.add('gone');
-    navbar.classList.add('visible');
-    document.body.classList.remove('intro-active');
-    introComplete = true;
-  }
+function skipIntroImmediately() {
+  intro.classList.add('gone');
+  navbar.classList.add('visible');
+  document.body.classList.remove('intro-active');
+  introComplete = true;
+  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
+}
 
   function revealLogo() {
     introVideo.classList.add('hide');
@@ -736,35 +692,37 @@ function dismissIntro() {
   }
 
   function dismissIntro() {
-    if (!introComplete) return;
+  if (!introComplete) return;
 
-    localStorage.setItem(introKey, todayKey);
-    scrollHint.style.opacity = '0';
+  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
 
-    const navRect = navLogoImg.getBoundingClientRect();
-    const logoRect = introLogo.getBoundingClientRect();
+  localStorage.setItem(introKey, todayKey);
+  scrollHint.style.opacity = '0';
 
-    const dx = (navRect.left + navRect.width / 2) - (logoRect.left + logoRect.width / 2);
-    const dy = (navRect.top + navRect.height / 2) - (logoRect.top + logoRect.height / 2);
-    const scaleX = navRect.width / logoRect.width;
-    const scaleY = navRect.height / logoRect.height;
-    const scale = Math.min(scaleX, scaleY);
+  const navRect = navLogoImg.getBoundingClientRect();
+  const logoRect = introLogo.getBoundingClientRect();
 
-    introLogo.classList.add('fly-to-nav');
-    introLogo.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-    introLogo.style.opacity = '0';
+  const dx = (navRect.left + navRect.width / 2) - (logoRect.left + logoRect.width / 2);
+  const dy = (navRect.top + navRect.height / 2) - (logoRect.top + logoRect.height / 2);
+  const scaleX = navRect.width / logoRect.width;
+  const scaleY = navRect.height / logoRect.height;
+  const scale = Math.min(scaleX, scaleY);
 
-    navbar.classList.add('visible');
+  introLogo.classList.add('fly-to-nav');
+  introLogo.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  introLogo.style.opacity = '0';
 
-    setTimeout(() => {
-      intro.classList.add('fade-out');
-      document.body.classList.remove('intro-active');
-    }, 500);
+  navbar.classList.add('visible');
 
-    setTimeout(() => {
-      intro.classList.add('gone');
-    }, 1300);
-  }
+  setTimeout(() => {
+    intro.classList.add('fade-out');
+    document.body.classList.remove('intro-active');
+  }, 500);
+
+  setTimeout(() => {
+    intro.classList.add('gone');
+  }, 1300);
+}
 
   if (localStorage.getItem(introKey) === todayKey) {
     skipIntroImmediately();
