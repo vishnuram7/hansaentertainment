@@ -119,24 +119,73 @@
     }
   }
 
+  function hideMuteButton() {
+    btn.style.opacity = '0';
+    btn.style.pointerEvents = 'none';
+    btn.style.visibility = 'hidden';
+  }
+
   btn.addEventListener('click', async function () {
     try {
       if (video.muted) {
         video.muted = false;
         video.volume = 1;
-        await video.play(); // important for browser audio unlock
+        await video.play();
       } else {
         video.muted = true;
       }
-
       updateMuteUI();
     } catch (err) {
       console.error('Audio toggle failed:', err);
     }
   });
 
+  video.addEventListener('ended', hideMuteButton);
+
+  window.hideIntroMuteButton = hideMuteButton;
+
   updateMuteUI();
 })();
+  function skipIntroImmediately() {
+  intro.classList.add('gone');
+  navbar.classList.add('visible');
+  document.body.classList.remove('intro-active');
+  introComplete = true;
+  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
+}
+
+function dismissIntro() {
+  if (!introComplete) return;
+
+  if (window.hideIntroMuteButton) window.hideIntroMuteButton();
+
+  localStorage.setItem(introKey, todayKey);
+  scrollHint.style.opacity = '0';
+
+  const navRect = navLogoImg.getBoundingClientRect();
+  const logoRect = introLogo.getBoundingClientRect();
+
+  const dx = (navRect.left + navRect.width / 2) - (logoRect.left + logoRect.width / 2);
+  const dy = (navRect.top + navRect.height / 2) - (logoRect.top + logoRect.height / 2);
+  const scaleX = navRect.width / logoRect.width;
+  const scaleY = navRect.height / logoRect.height;
+  const scale = Math.min(scaleX, scaleY);
+
+  introLogo.classList.add('fly-to-nav');
+  introLogo.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  introLogo.style.opacity = '0';
+
+  navbar.classList.add('visible');
+
+  setTimeout(() => {
+    intro.classList.add('fade-out');
+    document.body.classList.remove('intro-active');
+  }, 500);
+
+  setTimeout(() => {
+    intro.classList.add('gone');
+  }, 1300);
+}
 </script>
 
 
